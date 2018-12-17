@@ -51,6 +51,9 @@ class Point(object):
         self.x = x
         self.y = y
         self.move = 0
+        self.originalx = x
+        self.originaly = y
+        self.totaldist = 0
 
     def __repr__(self):
         return "Point({}, {})".format(self.x, self.y)
@@ -59,11 +62,13 @@ class Point(object):
         return Point(self.x, self.y)
 
     def move_to(self, x, y):
+        self.totaldist += self.get_distance_from(Point(x, y))
         self.x = x
         self.y = y
         self.move += 1
 
     def move_by(self, x, y):
+        self.totaldist += self.get_distance_from(Point(self.x + x, self.y + y))
         self.x += x
         self.y += y
         self.move += 1
@@ -72,9 +77,23 @@ class Point(object):
         return self.move
 
     def get_distance_from(self, point):
+        self.move += 1
         return (((point.x - self.x) ** 2) + (point.y - self.y) ** 2) ** 0.5
 
     def get_distance_from_start(self):
+        return (((self.originalx - self.x) ** 2) + (self.originaly - self.y) ** 2) ** 0.5
+
+    def get_distance_traveled(self):
+        return self.totaldist
+
+    def closer_to(self, p2, p3):
+        if self.get_distance_from(p3) < self.get_distance_from(p2):
+            return p3
+        else:
+            return p2
+
+    def halfway_to(self, p2):
+        return ((self.x + p2.x) / 2), ((self.y + p2.y) / 2)
 
 
 def run_test_init():
@@ -804,7 +823,7 @@ def run_test_get_distance_from_start():
         print('Actually is:', p2.get_distance_from_start())
     """
     # -------------------------------------------------------------------------
-    # TODO: 10.  Follow the same instructions as in _TODO_ 3 above,
+    # DONE: 10.  Follow the same instructions as in _TODO_ 3 above,
     #    but for the  get_distance_from_START  method specified above.
     # -------------------------------------------------------------------------
     print()
@@ -887,7 +906,7 @@ def run_test_get_distance_traveled():
         print('Actual:', p4.get_distance_traveled())
     """
     # -------------------------------------------------------------------------
-    # TODO: 11.  Follow the same instructions as in _TODO_ 3 above,
+    # DONE: 11.  Follow the same instructions as in _TODO_ 3 above,
     #    but for the  get_distance_traveled  method specified above.
     # -------------------------------------------------------------------------
     print()
@@ -971,7 +990,7 @@ def run_test_closer_to():
         print('Actual:  ', p1.closer_to(p4, p5) is p5)
     """
     # -------------------------------------------------------------------------
-    # TODO: 12.  Follow the same instructions as in TO-DO 3 above,
+    # DONE: 12.  Follow the same instructions as in TO-DO 3 above,
     #    but for the  closer_to  method specified above.
     # -------------------------------------------------------------------------
     print()
@@ -1054,7 +1073,7 @@ def run_test_halfway_to():
 
     """
     # -------------------------------------------------------------------------
-    # TODO: 13.  Follow the same instructions as in TO-DO 3 above,
+    # DONE: 13.  Follow the same instructions as in TO-DO 3 above,
     #    but for the  halfway_to  method specified above.
     # -------------------------------------------------------------------------
     print()
